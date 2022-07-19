@@ -73,9 +73,11 @@ final class DecodeHandler extends Handler {
     Result rawResult = null;
     PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
     if (source != null) {
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
+
       try {
-        rawResult = multiFormatReader.decodeWithState(bitmap);
+        rawResult = multiFormatReader.decode(bitmap, hints);
+
       } catch (ReaderException re) {
         // continue
       } finally {
